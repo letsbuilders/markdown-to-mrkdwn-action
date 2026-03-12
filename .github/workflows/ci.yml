@@ -52,10 +52,13 @@ jobs:
           INPUT_TEXT: "### test"
           GITHUB_OUTPUT: /tmp/test
         run: |
+          touch $GITHUB_OUTPUT
           docker run \
             --env INPUT_TEXT="${{ env.INPUT_TEXT }}" \
             --env GITHUB_OUTPUT="${{ env.GITHUB_OUTPUT }}" \
+            -v /tmp/test:/tmp/test \
             --rm ${{ env.TEST_TAG }}
+          cat /tmp/test
 
   test-action:
     name: GitHub Actions Test
@@ -70,7 +73,7 @@ jobs:
         id: test-action
         uses: ./
         with:
-          text: "### test"
+          text: "### test\r\n* test bullet point\r\n\r\n**test bolded text**"
 
       - name: Print Output
         id: output
