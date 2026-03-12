@@ -54,7 +54,7 @@ jobs:
         run: |
           docker run \
             --env INPUT_TEXT="${{ env.INPUT_TEXT }}" \
-            --env GITHUB_OUTPUT="${{ env.GITHB_OUTPUT }}" \
+            --env GITHUB_OUTPUT="${{ env.GITHUB_OUTPUT }}" \
             --rm ${{ env.TEST_TAG }}
 
   test-action:
