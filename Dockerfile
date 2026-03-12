@@ -1,7 +1,7 @@
 FROM python:3.14-slim-trixie
 
-RUN groupadd --system --gid 999 nonroot \
- && useradd --system --gid 999 --uid 999 --create-home nonroot
+RUN groupadd --system --gid 1001 nonroot \
+ && useradd --system --gid 1001 --uid 1001 --create-home nonroot
 
 WORKDIR /converter
 
