@@ -1,5 +1,4 @@
 import os
-import uuid
 
 from markdown_to_mrkdwn import SlackMarkdownConverter
 
@@ -23,11 +22,9 @@ def convert(text: str) -> str:
 
 
 def github_output(key, message):
-    delimiter = str(uuid.uuid4())
     with open(os.environ['GITHUB_OUTPUT'], mode='a', encoding='UTF-8') as fh:
-        print(f'{key}<<{delimiter}', file=fh)
-        print(message, file=fh)
-        print(delimiter, file=fh)
+        message_encoded = message.encode("unicode_escape").decode("utf-8")
+        print(f'{key}<<{message_encoded}', file=fh)
 
 
 def main():
