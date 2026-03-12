@@ -33,7 +33,7 @@ def github_output(key, message):
 def main():
     input_text = os.environ["INPUT_TEXT"]
     output_text = convert(input_text)
-    github_output(key='test', message=output_text)
+    github_output(key='text', message=output_text)
 
 
 if __name__ == "__main__":
