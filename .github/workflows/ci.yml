@@ -57,7 +57,7 @@ jobs:
             --env GITHUB_OUTPUT="/tmp/test" \
             -v $PWD/tmp:/tmp/ \
             --rm ${{ env.TEST_TAG }}
-          cat /tmp/test
+          cat $PWD/tmp/test
 
   test-action:
     name: GitHub Actions Test
