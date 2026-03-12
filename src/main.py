@@ -1,5 +1,7 @@
-from markdown_to_mrkdwn import SlackMarkdownConverter
 import os
+import uuid
+
+from markdown_to_mrkdwn import SlackMarkdownConverter
 
 
 def remove_comments(line):
@@ -19,14 +21,19 @@ def convert(text: str) -> str:
     )
     return converter.convert(text)
 
+
+def github_output(key, message):
+    delimiter = str(uuid.uuid4())
+    with open(os.environ['GITHUB_OUTPUT'], mode='a', encoding='UTF-8') as fh:
+        print(f'{key}<<${delimiter}', file=fh)
+        print(message, file=fh)
+        print(f'${delimiter}', file=fh)
+
+
 def main():
     input_text = os.environ["INPUT_TEXT"]
     output_text = convert(input_text)
-
-    github_output = os.environ["GITHUB_OUTPUT"]
-
-    with open(github_output, "w") as f:
-        f.write(f'text={output_text}')
+    github_output(key='test', message=output_text)
 
 
 if __name__ == "__main__":
