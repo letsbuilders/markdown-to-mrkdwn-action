@@ -50,9 +50,11 @@ jobs:
         id: run
         env:
           INPUT_TEXT: "### test"
+          GITHB_OUTPUT: /tmp/test
         run: |
           docker run \
-            --env INPUT_TEXT="${{ env.INPUT_WHO_TO_GREET }}" \
+            --env INPUT_TEXT="${{ env.INPUT_TEXT }}" \
+            --env GITHB_OUTPUT="${{ env.GITHB_OUTPUT }}" \
             --rm ${{ env.TEST_TAG }}
 
   test-action:
