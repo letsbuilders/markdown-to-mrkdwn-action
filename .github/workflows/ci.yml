@@ -50,13 +50,12 @@ jobs:
         id: run
         env:
           INPUT_TEXT: "### test"
-          GITHUB_OUTPUT: /tmp/test
         run: |
-          touch $GITHUB_OUTPUT
+          mkdir -p $PWD/tmp
           docker run \
             --env INPUT_TEXT="${{ env.INPUT_TEXT }}" \
-            --env GITHUB_OUTPUT="${{ env.GITHUB_OUTPUT }}" \
-            -v /tmp/test:/tmp/test \
+            --env GITHUB_OUTPUT="/tmp/test" \
+            -v $PWD/tmp:/tmp/ \
             --rm ${{ env.TEST_TAG }}
           cat /tmp/test
 
