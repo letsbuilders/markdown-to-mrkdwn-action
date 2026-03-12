@@ -76,4 +76,10 @@ jobs:
 
       - name: Print Output
         id: output
-        run: echo "${{ steps.test-action.outputs.text }}"
+        env:
+          TEXT: |
+            - type: "section"
+              text:
+                type: "mrkdwn"
+                text: ${{ toJSON(steps.test-action.outputs.text) }}
+        run: echo "${{ env.TEXT }}"
