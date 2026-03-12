@@ -25,9 +25,9 @@ def convert(text: str) -> str:
 def github_output(key, message):
     delimiter = str(uuid.uuid4())
     with open(os.environ['GITHUB_OUTPUT'], mode='a', encoding='UTF-8') as fh:
-        print(f'{key}<<${delimiter}', file=fh)
+        print(f'{key}<<{delimiter}', file=fh)
         print(message, file=fh)
-        print(f'${delimiter}', file=fh)
+        print(delimiter, file=fh)
 
 
 def main():
