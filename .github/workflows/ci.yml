@@ -12,6 +12,18 @@ permissions:
   contents: read
 
 jobs:
+  unittest:
+    runs-on: ubuntu-latest
+    name: Unit tests
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v6
+
+      - run: |
+          pip install tox
+          tox
+
   test-docker:
     name: Docker Tests
     runs-on: ubuntu-latest
