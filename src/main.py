@@ -4,13 +4,14 @@ import uuid
 from markdown_to_mrkdwn import SlackMarkdownConverter
 
 
-def remove_comments(line):
-    if line.startswith("<!--"):
+def remove_comments(line: str) -> str:
+    if line.startswith("<!--") and line.endswith("-->"):
         return ""
     return line
 
 
 def convert(text: str) -> str:
+    """convert markdown to mrkdwn and apply all extensions"""
     converter = SlackMarkdownConverter()
     converter.register_plugin(
         name="remove_comments",
@@ -22,9 +23,15 @@ def convert(text: str) -> str:
     return converter.convert(text)
 
 
-def github_output(key, message):
+def github_output(key, message) -> None:
+    """
+    save a message to GITHUB_OUTPUT
+    use unique delimiters as supported by GitHub
+    https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands#multiline-strings
+    """
     delimiter = str(uuid.uuid4())
     with open(os.environ['GITHUB_OUTPUT'], mode='a', encoding='UTF-8') as fh:
+        # the output is going to be reused in a JSON payload so we're encoding it to simplify that
         message_encoded = message.encode("unicode_escape").decode("utf-8")
         print(f'{key}<<{delimiter}', file=fh)
         print(message_encoded, file=fh)
