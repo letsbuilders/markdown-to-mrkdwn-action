@@ -15,6 +15,7 @@ outputs:
 
 runs:
   using: docker
-  image: Dockerfile
+  image: ghcr.io/letsbuilders/markdown-to-mrkdwn-action@sha-62af71b38d4e80f0aa7f6e92d6c3624ce61b9808
+#  image: ghcr.io/letsbuilders/markdown-to-mrkdwn-action@latest
   env:
     INPUT_TEXT: ${{ inputs.text }}

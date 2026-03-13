@@ -1,8 +1,5 @@
 name: build-image
 on:
-  pull_request:
-    branches:
-      - master
   push:
     branches:
       - master
@@ -24,17 +21,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
-      - uses: docker/metadata-action@v5
+      - uses: docker/metadata-action@v6
         id: meta
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
             type=raw,value=latest,enable=${{ github.ref_name == 'master' }}
-            type=raw,value=v1,enable=${{ github.ref_name == 'master' }}
             type=sha,format=long
-            type=ref,event=branch
 
-      - uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@v7
         with:
           context: .
           file: Dockerfile
