@@ -1,0 +1,101 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  unittest:
+    runs-on: ubuntu-latest
+    name: Unit tests
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+
+      - run: pip install tox
+
+      - run: tox
+
+  test-docker:
+    name: Docker Tests
+    runs-on: ubuntu-latest
+
+    # Run a local registry to push to
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5001:5000
+
+    env:
+      TEST_TAG: localhost:5001/actions/markdown-to-mrkdwn:latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Docker BuildX
+        id: setup-buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          install: true
+          driver-opts: network=host
+
+      - name: Build the Container
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.TEST_TAG }}
+
+      - name: Run the Container
+        id: run
+        env:
+          INPUT_TEXT: "### test"
+        run: |
+          mkdir -p $PWD/tmp
+          docker run \
+            --env INPUT_TEXT="${{ env.INPUT_TEXT }}" \
+            --env GITHUB_OUTPUT="/tmp/test" \
+            -v $PWD/tmp:/tmp/ \
+            --rm ${{ env.TEST_TAG }}
+          cat $PWD/tmp/test
+
+  test-action:
+    name: GitHub Actions Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v6
+
+      - name: Test Local Action
+        id: test-action
+        uses: ./
+        with:
+          text: "### test\r\n* test bullet point\r\n\r\n**test bolded text**"
+
+      - name: Print Output
+        id: output
+        env:
+          TEXT: |
+            - type: "section"
+              text:
+                type: "mrkdwn"
+                text: ${{ toJSON(steps.test-action.outputs.text) }}
+        run: echo "${{ env.TEXT }}"

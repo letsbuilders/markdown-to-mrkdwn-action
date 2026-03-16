@@ -1,0 +1,22 @@
+name: markdown-to-mrkdwn-converter
+description: convert markdown to slack mrkdwn
+author: GitHub Actions
+
+# Define your inputs here.
+inputs:
+  text:
+    description: markdown text to convert
+    required: true
+
+# Define your outputs here.
+outputs:
+  text:
+    description: mrkdwn
+
+runs:
+  using: docker
+  # for development uncomment the Dockerfile line and comment out the latest image one
+#  image: Dockerfile
+  image: docker://ghcr.io/letsbuilders/markdown-to-mrkdwn-action:latest
+  env:
+    INPUT_TEXT: ${{ inputs.text }}
