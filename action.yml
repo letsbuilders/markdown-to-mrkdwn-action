@@ -1,5 +1,5 @@
-name: markdown-to-mkdown-converter
-description: convert markdown to slack mkdown
+name: markdown-to-mrkdwn-converter
+description: convert markdown to slack mrkdwn
 author: GitHub Actions
 
 # Define your inputs here.
@@ -11,7 +11,7 @@ inputs:
 # Define your outputs here.
 outputs:
   text:
-    description: mkdown
+    description: mrkdwn
 
 runs:
   using: docker
