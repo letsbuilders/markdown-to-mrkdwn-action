@@ -9,6 +9,12 @@ def remove_comments(line: str) -> str:
         return ""
     return line
 
+def escape_double_quotes(line: str) -> str:
+    # if line.startswith("<!--") and line.endswith("-->"):
+    if '"' in line:
+        return line.replace('"', r'\"')
+    return line
+
 
 def convert(text: str) -> str:
     """convert markdown to mrkdwn and apply all extensions"""
@@ -17,6 +23,13 @@ def convert(text: str) -> str:
         name="remove_comments",
         converter_func=remove_comments,
         priority=10,
+        scope="line",
+        timing="before"
+    )
+    converter.register_plugin(
+        name="escape_double_quotes",
+        converter_func=escape_double_quotes,
+        priority=9,
         scope="line",
         timing="before"
     )
